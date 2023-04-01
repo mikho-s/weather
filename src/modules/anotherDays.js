@@ -19,7 +19,6 @@ function separationDays(array) {
     let Dt = new Date((element.dt) * 1000);
 
     if (Dt.getDay() == today.getDay()) {
-      // console.log("today ");
     }
     else if (Dt.getDay() == 0) {
       everydayCall(Dt, element)
@@ -64,15 +63,11 @@ function everydayCall(Dt, element) {
 
 
 function createAnotherDayBlock(number, Dt) {
-  // console.log(Dt);
-  // console.log(Dt.getDate());
-  // console.log(Dt.getMonth());
+
   const DaysRow = document.querySelector(".weather__footer-days")
   const blockDay = document.createElement('div');
   blockDay.classList.add("footer-days__item-day");
-  // console.log(blockDay);
   blockDay.classList.add(`day${number}`)
-  // console.log(blockDay);
   DaysRow.append(blockDay)
 
   // блок с днем недели
@@ -90,7 +85,6 @@ function createAnotherDayBlock(number, Dt) {
 
 function createAnotherTimeBlock(numberDay, timeHour, obj) {
   const currentDayTime = document.querySelector(`.timeBlock${numberDay}`);
-  // console.log(currentDayTime);
 
   const hours = document.createElement('div');
   hours.classList.add('footer-days__hours');
@@ -126,13 +120,7 @@ function createAnotherTimeBlock(numberDay, timeHour, obj) {
 
 
 
-
-
-
-
-
 function currentDay(number, Dt) {
-  console.log(Dt);
   if (number == 0) { return ' Неділя ' + '(' + (Dt.getDate()) + '.' + ((Dt.getMonth()) + 1) + ')' };
   if (number == 1) { return ' Понеділок ' + '(' + (Dt.getDate()) + '.' + ((Dt.getMonth()) + 1) + ')' };
   if (number == 2) { return ' Вівторок ' + '(' + (Dt.getDate()) + '.' + ((Dt.getMonth()) + 1) + ')' };
