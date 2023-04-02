@@ -8,8 +8,8 @@ export const getAnotherDaysWeatherData = async (city) => {
   if (anotherDaysData.childNodes.length > 1) {
     anotherDaysData.replaceChildren()
   }
-  const responce = await fetch(`https://api.openweathermap.org/data/2.5/forecast/?q=${city}&appid=6e5bc8936b6c35ca2484b1ad8cc7a1da&units=metric&lang=ua`);
-  const data = await responce.json()
+  const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast/?q=${city}&appid=6e5bc8936b6c35ca2484b1ad8cc7a1da&units=metric&lang=ua`);
+  const data = await response.json()
   separationDays(data.list)
 }
 
