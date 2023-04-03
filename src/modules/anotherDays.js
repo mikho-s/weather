@@ -1,6 +1,6 @@
 
-import { directionOfwWind } from './directionOfwWind.js';
-// import { everydayCall } from './everydayCall.js';
+// import { directionOfwWind } from './directionOfwWind.js';
+import { directionOfwWind, createElem } from './helpers.js';
 
 
 export const getAnotherDaysWeatherData = async (city) => {
@@ -8,9 +8,14 @@ export const getAnotherDaysWeatherData = async (city) => {
   if (anotherDaysData.childNodes.length > 1) {
     anotherDaysData.replaceChildren()
   }
-  const responce = await fetch(`https://api.openweathermap.org/data/2.5/forecast/?q=${city}&appid=6e5bc8936b6c35ca2484b1ad8cc7a1da&units=metric&lang=ua`);
-  const data = await responce.json()
-  separationDays(data.list)
+  try {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast/?q=${city}&appid=6e5bc8936b6c35ca2484b1ad8cc7a1da&units=metric&lang=ua`);
+    const data = await response.json()
+    separationDays(data.list)
+  } catch (error) {
+    console.error(error, 'response another days error');
+  }
+
 }
 
 function separationDays(array) {
@@ -65,56 +70,34 @@ function everydayCall(Dt, element) {
 function createAnotherDayBlock(number, Dt) {
 
   const DaysRow = document.querySelector(".weather__footer-days")
-  const blockDay = document.createElement('div');
-  blockDay.classList.add("footer-days__item-day");
-  blockDay.classList.add(`day${number}`)
-  DaysRow.append(blockDay)
+  const blockDay = createElem('div', ['footer-days__item-day', `day${number}`], DaysRow);
 
   // блок с днем недели
-  const blockDayName = document.createElement('div');
-  blockDayName.classList.add("footer-days__dayName");
+  const blockDayName = createElem('div', ['footer-days__dayName'], blockDay);
   blockDayName.innerHTML = currentDay(number, Dt);
-  blockDay.append(blockDayName)
 
   // освноной блок где будут дочерние блоки в 3,6,9,12 часов погодой каждый день
-  const blockTimeMain = document.createElement('div');
-  blockTimeMain.classList.add("footer-days__times-block", `timeBlock${number}`);
-  blockDay.append(blockTimeMain)
-
+  const blockTimeMain = createElem('div', ["footer-days__times-block", `timeBlock${number}`], blockDay);
 }
 
 function createAnotherTimeBlock(numberDay, timeHour, obj) {
   const currentDayTime = document.querySelector(`.timeBlock${numberDay}`);
+  const hours = createElem('div', ['footer-days__hours'], currentDayTime);
 
-  const hours = document.createElement('div');
-  hours.classList.add('footer-days__hours');
-  currentDayTime.append(hours)
-
-  const hourTime = document.createElement('div');
-  hourTime.classList.add('footer-days__hourTime');
+  const hourTime = createElem('div', ['footer-days__hourTime'], hours);
   hourTime.innerHTML = timeHour + ":00"
-  hours.append(hourTime)
 
-  const temp = document.createElement('div');;
-  temp.classList.add('.footer-days__temp');
+  const temp = createElem('div', ['footer-days__temp'], hours);
   temp.innerHTML = Math.round(obj.main.temp) + '&deg;';
-  hours.append(temp)
 
-  const ico = document.createElement('div');;
-  ico.classList.add('footer-days__icon', "ibg");
+  const ico = createElem('div', ['footer-days__icon', "ibg"], hours);
   ico.innerHTML = `<img src="https://openweathermap.org/img/wn/${obj.weather[0]['icon']}@2x.png" alt="">`;;
-  hours.append(ico)
 
-  const descrip = document.createElement('div');;
-  descrip.classList.add('.footer-days__descrip');
+  const descrip = createElem('div', ['footer-days__descrip'], hours);
   descrip.innerHTML = obj.weather[0]['description'];
-  hours.append(descrip)
 
-
-  const wind = document.createElement('div');;
-  wind.classList.add('.footer-days__wind');
+  const wind = createElem('div', ['footer-days__wind'], hours);
   wind.innerHTML = obj.wind.speed + ' м/с ' + directionOfwWind(obj.wind.deg);
-  hours.append(wind)
 }
 
 

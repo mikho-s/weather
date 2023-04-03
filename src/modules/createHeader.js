@@ -1,4 +1,4 @@
-import { hidesearch } from './hidesearch.js';
+import { hidesearch, createElem } from './helpers.js';
 
 
 export function createHeader(data) {
@@ -8,26 +8,21 @@ export function createHeader(data) {
     Header.removeChild(Header.firstChild)
     // Header.replaceChildren()
   }
+  // тут важно prepend а не аппенд
   const curentCityBlock = document.createElement('div');
   curentCityBlock.classList.add('curent-city-block');
-  Header.prepend(curentCityBlock);
+  Header.prepend(curentCityBlock)
 
-  const currentCityName = document.createElement('div');
-  currentCityName.classList.add('current-city-name');
+  const currentCityName = createElem('div', ['current-city-name'], curentCityBlock);
   currentCityName.innerHTML = data.name;
-  console.log(currentCityName);
 
-  const currentCityDate = document.createElement('div');
-  currentCityDate.classList.add('current-city-date');
+  const currentCityDate = createElem('div', ['current-city-date'], curentCityBlock);
 
   let myDate = new Date(data.dt * 1000);
   currentCityDate.innerHTML = myDate.toDateString();
 
-  const currentCityChange = document.createElement('div');
-  currentCityChange.classList.add('current-city-change');
+  const currentCityChange = createElem('div', ['current-city-change'], curentCityBlock);
   currentCityChange.innerHTML = "Змінити місто ";
-
-  curentCityBlock.append(currentCityName, currentCityDate, currentCityChange);
 
 
   currentCityChange.addEventListener('click', () => {
