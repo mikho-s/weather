@@ -39,5 +39,6 @@ export const createElem = (tag = 'div', className = [], parent = null) => {
   const elem = document.createElement(tag);
   elem.classList.add(...className);
   parent && parent.append(elem)
+  // parent.append(elem)
   return elem
 }

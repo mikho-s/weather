@@ -15,6 +15,9 @@ export const getWeatherData = async (city) => {
   }
 }
 
+
+
+
 function createContent(data) {
   const body = document.querySelector(".weather__body");
   console.log(body.childNodes.length);
@@ -22,6 +25,35 @@ function createContent(data) {
   if (body.childNodes.length >= 1) {
     body.replaceChildren()
   }
+
+
+  const htmlData = [
+    { elemntName: "bloc1", tag: "div", classes: ['body1'], parent: body },
+    { elemntName: "bloc2", tag: "div", classes: ['body2'], parent: body },
+    { elemntName: "bloc3", tag: "div", classes: ['body3'], parent: body }];
+
+
+  function createElementFromObj(data) {
+
+    const elements = {}
+
+    data.forEach((el) => {
+      const { elemntName, tag, classes, parent } = el;
+
+      const elem = createElem(tag, classes, parent);
+
+      elements[elemntName] = elem;
+
+    })
+    return elements
+  }
+
+  const createdElements = createElementFromObj(htmlData)
+
+  console.log(createdElements);
+  createdElements.bloc2.innerText = 'ЭТО БЛОК 2';
+
+
 
   const weatherMainContent = createElem('div', ['body-weather__main-content'], body);
   body.append(weatherMainContent);
@@ -49,6 +81,7 @@ function createContent(data) {
   const mainIndicators = createElem('div', ['body-weather__main-indicators'], weatherMainInfo);
 
 
+
   const windBlock = createElem('div', ['body-weather__main-indicators-item', 'item-wind'], mainIndicators);
   windBlock.innerText = 'Вітер';
   const windValue = createElem('div', ['body-weather__main-indicators-value', 'wind'], windBlock);
@@ -69,5 +102,8 @@ function createContent(data) {
   cloudinessBlock.innerText = 'Хмарність'
   const cloudinessValue = createElem('div', ['body-weather__main-indicators-value', 'cloudiness'], cloudinessBlock);
   cloudinessValue.textContent = data.clouds.all + ' %'
-
+  // bloc3.innerText = 'ЭТО БЛОК 3';
+  // bloc4.innerText = 'ЭТО БЛОК 4';
 }
+// bloc3.innerText = 'ЭТО БЛОК 3';
+// bloc4.innerText = 'ЭТО БЛОК 4';

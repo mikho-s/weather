@@ -1,5 +1,3 @@
-
-// import { directionOfwWind } from './directionOfwWind.js';
 import { directionOfwWind, createElem } from './helpers.js';
 
 
