@@ -91,6 +91,7 @@ function createAnotherTimeBlock(numberDay, timeHour, obj) {
     },
   ]
 
+
   createElements(hoursData, hoursBlocks)
 }
 

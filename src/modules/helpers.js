@@ -78,7 +78,11 @@ export const createElem = (tag = 'div', classNames = [], parent = null, htmlData
 export const createElements = (array, mapBlocks) => {
   array.forEach((el) => {
     const { tag, classNames, parent, htmlData, elementName } = el
-    const htmlElem = createElem(tag, classNames, parent, htmlData)
+
+    const newparent = typeof parent === "string" ? mapBlocks.get(parent) : parent
+
+    const htmlElem = createElem(tag, classNames, newparent, htmlData)
     elementName && mapBlocks.set(elementName, htmlElem)
+    // mapBlocks.set(elementName, htmlElem)
   })
 }

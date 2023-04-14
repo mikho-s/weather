@@ -1,4 +1,4 @@
-import { makeMap, directionOfwWind, hidesearch, createElem } from './helpers.js';
+import { makeMap, directionOfwWind, hidesearch, createElem, createElements } from './helpers.js';
 import { createHeader } from './createHeader.js';
 
 
@@ -16,8 +16,6 @@ export const getWeatherData = async (city) => {
 }
 
 
-
-
 function createContent(data) {
   const body = document.querySelector(".weather__body");
   console.log(body.childNodes.length);
@@ -26,84 +24,107 @@ function createContent(data) {
     body.replaceChildren()
   }
 
-
-  const htmlData = [
-    { elemntName: "bloc1", tag: "div", classes: ['body1'], parent: body },
-    { elemntName: "bloc2", tag: "div", classes: ['body2'], parent: body },
-    { elemntName: "bloc3", tag: "div", classes: ['body3'], parent: body }];
-
-
-  function createElementFromObj(data) {
-
-    const elements = {}
-
-    data.forEach((el) => {
-      const { elemntName, tag, classes, parent } = el;
-
-      const elem = createElem(tag, classes, parent);
-
-      elements[elemntName] = elem;
-
-    })
-    return elements
-  }
-
-  const createdElements = createElementFromObj(htmlData)
-
-  console.log(createdElements);
-  createdElements.bloc2.innerText = 'ЭТО БЛОК 2';
-
-
-
   const weatherMainContent = createElem('div', ['body-weather__main-content'], body);
-  body.append(weatherMainContent);
-
-
   const weatherMainInfo = createElem('div', ['body-weather__main-info'], body);
-
 
   const weatherMainMap = createElem('div', ['body-weather__main-map'], body);
   weatherMainContent.append(weatherMainInfo, weatherMainMap);
   weatherMainMap.innerHTML = makeMap(data);
 
-  const mainCondition = createElem('div', ['body-weather__main-condition'], weatherMainInfo);
+  const mainCondition = 'mainCondition';
+  const mainIndicators = 'mainIndicators';
+  const windBlock = 'windBlock';
+  const pressureBlock = 'pressureBlock';
+  const humidityBlock = 'humidityBlock';
+  const cloudinessBlock = 'cloudinessBlock';
 
-  const mainImage = createElem('div', ['body-weather__main-img'], mainCondition);
-  mainImage.innerHTML = `<img src="https://openweathermap.org/img/wn/${data.weather[0]['icon']}@2x.png" alt="">`;
+  const bodyBlocks = new Map();
+  const mainContentBlocksData = [
+    { elementName: 'mainCondition', tag: 'div', classNames: ['body-weather__main-condition'], parent: weatherMainInfo },
+    {
+      elementName: 'mainImage',
+      tag: 'div',
+      classNames: ['body-weather__main-img'],
+      parent: mainCondition,
+      htmlData: `<img src="https://openweathermap.org/img/wn/${data.weather[0]['icon']}@2x.png" alt="">`,
+    },
+    {
+      elementName: 'mainTempValue',
+      tag: 'div',
+      classNames: ['body-weather__main-value', 'temp'],
+      parent: mainCondition,
+      htmlData: Math.round(data.main.temp) + '&deg;',
+    },
+    {
+      elementName: 'mainShortdescription',
+      tag: 'div',
+      classNames: ['body-weather__main-short_decription'],
+      parent: weatherMainInfo,
+      htmlData: data.weather[0]['description'],
+    },
+    {
+      elementName: 'mainIndicators',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators'],
+      parent: weatherMainInfo
+    },
+    {
+      elementName: 'windBlock',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-item', 'item-wind'],
+      parent: mainIndicators,
+      htmlData: 'Вітер',
+    },
+    {
+      elementName: 'windValue',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-value', 'wind'],
+      parent: windBlock,
+      htmlData: data.wind.speed + ' м/с ' + directionOfwWind(data.wind.deg),
+    },
+    {
+      elementName: 'pressureBlock',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-item', 'item-pressure'],
+      parent: mainIndicators,
+      htmlData: 'Тиск',
+    },
+    {
+      elementName: 'pressureValue',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-value', 'pressure'],
+      parent: pressureBlock,
+      htmlData: data.main.pressure + ' мм ',
+    },
+    {
+      elementName: 'humidityBlock',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-item', 'item-humidity'],
+      parent: mainIndicators,
+      htmlData: 'Вологість',
+    },
+    {
+      elementName: 'humidityValue',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-value', 'humidity'],
+      parent: humidityBlock,
+      htmlData: data.main.humidity + ' %',
+    },
+    {
+      elementName: 'cloudinessBlock',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-item', 'item-cloudiness'],
+      parent: mainIndicators,
+      htmlData: 'Хмарність',
+    },
+    {
+      elementName: 'humidityValue',
+      tag: 'div',
+      classNames: ['body-weather__main-indicators-value', 'cloudiness'],
+      parent: cloudinessBlock,
+      htmlData: data.clouds.all + ' %'
+    },
+  ];
+  createElements(mainContentBlocksData, bodyBlocks)
 
-  const mainValue = createElem('div', ['body-weather__main-value'], mainCondition);
-  const tempValue = createElem('div', ['body-weather__main-value', 'temp'], mainValue);
-  tempValue.innerHTML = Math.round(data.main.temp) + '&deg;';
-
-  const mainShortdescription = createElem('div', ['body-weather__main-short_decription'], weatherMainInfo);
-  mainShortdescription.textContent = data.weather[0]['description'];
-
-  const mainIndicators = createElem('div', ['body-weather__main-indicators'], weatherMainInfo);
-
-
-
-  const windBlock = createElem('div', ['body-weather__main-indicators-item', 'item-wind'], mainIndicators);
-  windBlock.innerText = 'Вітер';
-  const windValue = createElem('div', ['body-weather__main-indicators-value', 'wind'], windBlock);
-  windValue.innerHTML = data.wind.speed + ' м/с ' + directionOfwWind(data.wind.deg);
-
-
-  const pressureBlock = createElem('div', ['body-weather__main-indicators-item', 'item-pressure'], mainIndicators);
-  pressureBlock.innerText = 'Тиск'
-  const pressureValue = createElem('div', ['body-weather__main-indicators-value', 'pressure'], pressureBlock);
-  pressureValue.textContent = data.main.pressure + ' мм ';
-
-  const humidityBlock = createElem('div', ['body-weather__main-indicators-item', 'item-humidity'], mainIndicators);
-  humidityBlock.innerText = 'Вологість'
-  const humidityValue = createElem('div', ['body-weather__main-indicators-value', 'pressure'], humidityBlock);
-  humidityValue.textContent = data.main.humidity + ' %';
-
-  const cloudinessBlock = createElem('div', ['body-weather__main-indicators-item', 'item-cloudiness'], mainIndicators);
-  cloudinessBlock.innerText = 'Хмарність'
-  const cloudinessValue = createElem('div', ['body-weather__main-indicators-value', 'cloudiness'], cloudinessBlock);
-  cloudinessValue.textContent = data.clouds.all + ' %'
-  // bloc3.innerText = 'ЭТО БЛОК 3';
-  // bloc4.innerText = 'ЭТО БЛОК 4';
 }
-// bloc3.innerText = 'ЭТО БЛОК 3';
-// bloc4.innerText = 'ЭТО БЛОК 4';
